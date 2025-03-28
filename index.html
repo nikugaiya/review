@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI点评生成器</title>
+  <style>
+    body { font-family: "Helvetica Neue", sans-serif; padding: 20px; background: #fffefc; }
+    h1 { font-size: 24px; margin-bottom: 16px; }
+    .section { margin-bottom: 20px; }
+    .keywords { display: flex; flex-wrap: wrap; gap: 10px; }
+    .keywords label { background: #eee; padding: 8px 12px; border-radius: 20px; cursor: pointer; }
+    .output { margin-top: 20px; padding: 16px; background: #f5f5f5; border-radius: 12px; white-space: pre-wrap; }
+    button { padding: 10px 20px; font-size: 16px; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>生成你的专属AI点评</h1>
+
+  <div class="section">
+    <h2>🍽 推荐菜品</h2>
+    <div class="keywords" id="dishKeywords">
+      <label><input type="checkbox" value="日本A5宫崎和牛八拼"> 日本A5宫崎和牛八拼</label>
+      <label><input type="checkbox" value="日本A5宫崎和牛四拼"> 日本A5宫崎和牛四拼</label>
+      <label><input type="checkbox" value="五拼刺身拼盘"> 五拼刺身拼盘</label>
+      <label><input type="checkbox" value="A5和牛鹅肝釜饭"> A5和牛鹅肝釜饭</label>
+      <label><input type="checkbox" value="日本小川马粪板胆"> 日本小川马粪板胆</label>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>✨ 评价维度</h2>
+    <div class="keywords" id="dimensionKeywords">
+      <label><input type="checkbox" value="环境好"> 环境好</label>
+      <label><input type="checkbox" value="卫生干净"> 卫生干净</label>
+      <label><input type="checkbox" value="味道好"> 味道好</label>
+      <label><input type="checkbox" value="口感不错"> 口感不错</label>
+      <label><input type="checkbox" value="服务很热情"> 服务很热情</label>
+      <label><input type="checkbox" value="服务很贴心"> 服务很贴心</label>
+      <label><input type="checkbox" value="有礼貌"> 有礼貌</label>
+      <label><input type="checkbox" value="上菜快"> 上菜快</label>
+      <label><input type="checkbox" value="很好吃"> 很好吃</label>
+      <label><input type="checkbox" value="服务很周到"> 服务很周到</label>
+      <label><input type="checkbox" value="菜品有特色"> 菜品有特色</label>
+      <label><input type="checkbox" value="小姐姐很热情"> 小姐姐很热情</label>
+      <label><input type="checkbox" value="菜量不错"> 菜量不错</label>
+      <label><input type="checkbox" value="老店值得信赖"> 老店值得信赖</label>
+      <label><input type="checkbox" value="很满意"> 很满意</label>
+      <label><input type="checkbox" value="鱼很新鲜"> 鱼很新鲜</label>
+    </div>
+  </div>
+
+  <button onclick="generateReview()">立即生成点评</button>
+
+  <div class="output" id="outputText" style="display:none;"></div>
+  <button id="copyBtn" style="margin-top: 10px; display:none;" onclick="copyText()">复制点评</button>
+
+  <script>
+    function generateReview() {
+      const dishes = Array.from(document.querySelectorAll('#dishKeywords input:checked')).map(el => el.value);
+      const dimensions = Array.from(document.querySelectorAll('#dimensionKeywords input:checked')).map(el => el.value);
+
+      if (dishes.length === 0 && dimensions.length === 0) {
+        alert('请至少选择一个关键词');
+        return;
+      }
+
+      const dish = dishes[Math.floor(Math.random() * dishes.length)] || "这道菜";
+      const dim1 = dimensions[Math.floor(Math.random() * dimensions.length)] || "味道不错";
+      const dim2 = dimensions[Math.floor(Math.random() * dimensions.length)] || "服务贴心";
+      const dim3 = dimensions[Math.floor(Math.random() * dimensions.length)] || "环境不错";
+
+      const templates = [
+        `🍚口味：${dish}的口感真是让人惊喜，鲜香浓郁，吃了一口就停不下来。
+🥩食材：每一口都能吃出新鲜感，${dim1}完全拿捏。
+🍴服务：${dim2}，小姐姐还会主动帮忙介绍菜品，点赞！
+🍃环境：${dim3}，适合和朋友小聚放松。
+🍭性价比：整体体验感满分，值得打卡～`,
+        `🍽推荐：今天试了${dish}，口感非常棒，${dim1}的感觉太加分。
+👩‍🍳服务员${dim2}，整个用餐过程都很愉快。
+🏠环境也${dim3}，聊天吃饭都很舒服。
+💯总的来说非常满意，下次一定还来！`
+      ];
+
+      const review = templates[Math.floor(Math.random() * templates.length)];
+      const output = document.getElementById('outputText');
+      output.innerText = review;
+      output.style.display = 'block';
+      document.getElementById('copyBtn').style.display = 'inline-block';
+    }
+
+    function copyText() {
+      const text = document.getElementById('outputText').innerText;
+      navigator.clipboard.writeText(text).then(() => alert('已复制点评！'));
+    }
+  </script>
+</body>
+</html>
